@@ -1,11 +1,13 @@
 # app.py
 from flask import Flask, request, jsonify
-from flask_cors import cross_origin
+from flask_cors import CORS,cross_origin
+from waitress import serve
 import pickle
 import pandas as pd
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)  # Enable CORS for the entire app
     model = pickle.load(open("Model.pkl", "rb"))
 
     @app.route("/")
@@ -359,8 +361,6 @@ def create_app():
     return app
 
 if __name__ == "__main__":
-    from waitress import serve
     app = create_app()
     #app.config['DEBUG'] = True
     app.run(debug=True)
-    serve(app, host='0.0.0.0', port=5000)
